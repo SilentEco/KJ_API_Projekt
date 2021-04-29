@@ -1,5 +1,8 @@
+using KJ_API_Projekt.model;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
@@ -13,7 +16,23 @@ namespace KJ_API_Projekt
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            var host = CreateHostBuilder(args).Build();
+
+            using (var scope = host.Services.CreateScope())
+            {
+
+                var services = scope.ServiceProvider;
+                var context = services.GetRequiredService<data.ApplicationDbContext>();
+                var userManager = services.GetRequiredService<UserManager<MyUser>>();
+                var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+               // try { await context.Seed(userManager, roleManager); }
+               // catch (Exception e) { Console.WriteLine("Error from Seed:" + e); }
+
+            }
+
+
+            host.Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

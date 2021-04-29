@@ -15,6 +15,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using KJ_API_Projekt.data;
 using KJ_API_Projekt.model;
+using Microsoft.AspNetCore.Authentication;
+using KJ_API_Projekt.ApiKey;
 
 namespace KJ_API_Projekt
 {
@@ -32,7 +34,12 @@ namespace KJ_API_Projekt
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));           
+                    Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddAuthentication("MyAuthScheme")
+                .AddScheme<AuthenticationSchemeOptions, ApiKeyAuthenticationHandler>("MyAuthScheme", null);
+
+           
 
             services.AddControllers();
 
@@ -55,6 +62,8 @@ namespace KJ_API_Projekt
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

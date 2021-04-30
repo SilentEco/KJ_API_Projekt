@@ -38,8 +38,8 @@ namespace KJ_API_Projekt
 
             services.AddAuthentication("MyAuthScheme")
                 .AddScheme<AuthenticationSchemeOptions, ApiKeyAuthenticationHandler>("MyAuthScheme", null);
+            services.AddDefaultIdentity<MyUser>().AddEntityFrameworkStores<ApplicationDbContext>();
 
-           
 
             services.AddControllers();
 

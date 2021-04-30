@@ -35,10 +35,10 @@ namespace KJ_API_Projekt
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-
+            services.AddDefaultIdentity<MyUser>().AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddAuthentication("MyAuthScheme")
                 .AddScheme<AuthenticationSchemeOptions, ApiKeyAuthenticationHandler>("MyAuthScheme", null);
-            services.AddDefaultIdentity<MyUser>().AddEntityFrameworkStores<ApplicationDbContext>();
+
 
 
             services.AddControllers();

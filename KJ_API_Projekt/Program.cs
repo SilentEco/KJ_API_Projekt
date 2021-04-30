@@ -24,10 +24,7 @@ namespace KJ_API_Projekt
                 var services = scope.ServiceProvider;
                 var context = services.GetRequiredService<data.ApplicationDbContext>();
                 var userManager = services.GetRequiredService<UserManager<MyUser>>();
-                //var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-
-                // try { await context.Seed(userManager, roleManager); }
-                // catch (Exception e) { Console.WriteLine("Error from Seed:" + e); }
+                
 
                 await context.Seed(userManager);
 

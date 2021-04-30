@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using KJ_API_Projekt.ApiKey;
 
 namespace KJ_API_Projekt.data
 {
@@ -16,8 +17,10 @@ namespace KJ_API_Projekt.data
         {
         }
 
+
         public DbSet<GeoMessages> geoMessages { get; set; }
 
+        public DbSet<ApiToken> ApiTokens { get; set; }
 
         public async Task Seed(UserManager<MyUser> userManager)
         {
@@ -28,6 +31,10 @@ namespace KJ_API_Projekt.data
 
             await userManager.CreateAsync(admin1, "Passw0rd!");
             await userManager.CreateAsync(admin2, "Passw0rd!");
+
+            ApiTokenManager getToken = new ApiTokenManager(this);
+
+            await getToken.GenerateTokenAsync(admin1);
 
             await SaveChangesAsync();
         }

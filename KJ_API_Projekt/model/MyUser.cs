@@ -9,7 +9,7 @@ namespace KJ_API_Projekt.model
     public class MyUser : IdentityUser
     {
         public string FirstName { get;set; }
-
         public string LastName { get; set; }
+
     }
 }

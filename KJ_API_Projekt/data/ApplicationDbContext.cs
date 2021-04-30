@@ -35,6 +35,7 @@ namespace KJ_API_Projekt.data
             ApiTokenManager getToken = new ApiTokenManager(this);
 
             await getToken.GenerateTokenAsync(admin1);
+            await getToken.GenerateTokenAsync(admin2);
 
             await SaveChangesAsync();
         }

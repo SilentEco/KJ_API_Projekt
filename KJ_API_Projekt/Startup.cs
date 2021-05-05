@@ -44,6 +44,20 @@ namespace KJ_API_Projekt
                                   });
             });
 
+            services.AddApiVersioning(o =>
+            {
+                o.DefaultApiVersion = new ApiVersion(2, 0);
+                o.AssumeDefaultVersionWhenUnspecified = true;
+                o.ReportApiVersions = true;
+            });
+
+            services.AddVersionedApiExplorer(o =>
+            {
+                o.GroupNameFormat = "'v'VVV";
+
+                o.SubstituteApiVersionInUrl = true;
+            });
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
@@ -57,7 +71,8 @@ namespace KJ_API_Projekt
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "KJ_API_Projekt", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Versioning by Url", Version = "v1.0" });
+                c.SwaggerDoc("v2", new OpenApiInfo { Title = "Versioning by Url", Version = "v2.0" });
             });
         }
 
@@ -68,7 +83,11 @@ namespace KJ_API_Projekt
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "KJ_API_Projekt v1"));
+                app.UseSwaggerUI(c => 
+                {
+                    c.SwaggerEndpoint($"/swagger/v1/swagger.json", "v1.0");
+                    c.SwaggerEndpoint($"/swagger/v1/swagger.json", "v2.0");
+                });
             }
 
             

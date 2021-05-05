@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 namespace KJ_API_Projekt.Controllers
 {
     [ApiController]
+    
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {

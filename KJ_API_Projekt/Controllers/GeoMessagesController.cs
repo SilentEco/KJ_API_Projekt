@@ -60,7 +60,7 @@ namespace KJ_API_Projekt.Controllers
             }
 
             // GET: api/GeoMessages/5
-            [HttpGet("[action]")]
+            [HttpGet("[action]/{id}")]
 
             public async Task<ActionResult<GeoMessages>> GetGeoMessages(int id)
             {

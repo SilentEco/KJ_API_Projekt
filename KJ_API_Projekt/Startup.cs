@@ -46,7 +46,7 @@ namespace KJ_API_Projekt
 
             services.AddApiVersioning(o =>
             {
-                o.DefaultApiVersion = new ApiVersion(2, 0);
+                o.DefaultApiVersion = new ApiVersion(1, 0);
                 o.AssumeDefaultVersionWhenUnspecified = true;
                 o.ReportApiVersions = true;
             });
@@ -86,7 +86,7 @@ namespace KJ_API_Projekt
                 app.UseSwaggerUI(c => 
                 {
                     c.SwaggerEndpoint($"/swagger/v1/swagger.json", "v1.0");
-                    c.SwaggerEndpoint($"/swagger/v1/swagger.json", "v2.0");
+                    c.SwaggerEndpoint($"/swagger/v2/swagger.json", "v2.0");
                 });
             }
 

@@ -17,8 +17,8 @@ namespace KJ_API_Projekt.data
         {
         }
 
-
-        public DbSet<GeoMessages> geoMessages { get; set; }
+        public DbSet <GeoMessagesV2> geoMessagesV2 { get; set; }
+        public DbSet <Message> messages { get; set; }
 
         public DbSet<ApiToken> ApiTokens { get; set; }
 

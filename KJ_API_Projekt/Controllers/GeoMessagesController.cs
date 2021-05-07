@@ -30,7 +30,7 @@ namespace KJ_API_Projekt.Controllers
 
             public async Task<ActionResult<IEnumerable<GeoMessages>>> GetgeoMessages()
             {
-                List<GeoMessagesV2> v2list = _context.geoMessagesV2.Include(a => a.Message).ToList();
+                List<GeoMessagesV2> v2list = await _context.geoMessagesV2.Include(a => a.Message).ToListAsync();
                 List<GeoMessages> v1list = new List<GeoMessages>();
                 foreach (var item in v2list)
                 {

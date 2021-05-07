@@ -94,12 +94,36 @@ namespace KJ_API_Projekt.Controllers
                 _context = context;
             }
 
+            [HttpGet("[action]/{id}")]
+
+            public async Task<ActionResult<GeoMessagesV2>> GetgeoMessages(int id)
+            {
+                return await _context.geoMessagesV2.Include(a => a.Message).FirstOrDefaultAsync(o => o.Id == id);
+               // return await _context.geoMessagesV2.Include(a => a.Message).ToListAsync();
+            }
+
             [HttpGet("[action]")]
 
-            public async Task<ActionResult<IEnumerable<GeoMessagesV2>>> GetgeoMessages()
+            public async Task<ActionResult<IEnumerable<GeoMessagesV2>>> GetgeoMessages(double minLon, double maxLon, double minLat, double maxLat)
             {
-                return await _context.geoMessagesV2.Include(a => a.Message).ToListAsync();
+                
+                return await _context.geoMessagesV2.Include(a => a.Message).Where(
+                    o => (o.longitude <= maxLon && o.longitude >= minLon) && (o.latitude <= maxLat && o.latitude >= minLat) )
+                    .ToListAsync();
             }
+
+
+            [HttpPost("[action]")]
+            
+            public async Task<ActionResult<GeoMessagesV2>> PostGeoMessages(GeoMessagesV2 geoMessages)
+            {
+                
+                _context.geoMessagesV2.Add(geoMessages);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction("GetGeoMessages", new { id = geoMessages.Id }, geoMessages);
+            }
+
         }
 
     }

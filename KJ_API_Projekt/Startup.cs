@@ -17,6 +17,7 @@ using KJ_API_Projekt.data;
 using KJ_API_Projekt.model;
 using Microsoft.AspNetCore.Authentication;
 using KJ_API_Projekt.ApiKey;
+using System.IO;
 
 namespace KJ_API_Projekt
 {
@@ -73,6 +74,9 @@ namespace KJ_API_Projekt
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Versioning by Url", Version = "v1.0" });
                 c.SwaggerDoc("v2", new OpenApiInfo { Title = "Versioning by Url", Version = "v2.0" });
+
+                var path = Path.Combine(AppContext.BaseDirectory, "dokumentation.xml");
+                c.IncludeXmlComments(path);
             });
         }
 

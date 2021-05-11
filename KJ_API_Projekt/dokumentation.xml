@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>KJ_API_Projekt</name>
+    </assembly>
+    <members>
+        <member name="M:KJ_API_Projekt.Controllers.v2.GeoMessagesController.GetgeoMessages(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Visa en  lista av geo comments inom ett visst område
+            </summary>
+            <param name="minLon">Minsta Longituden</param>
+            <param name="maxLon">Högsta Longituden</param>
+            <param name="minLat">Minsta Latituden</param>
+            <param name="maxLat">Högsta Latituden</param>
+            <returns>Returnerar en lista utefter dina valda inputs</returns>
+        </member>
+    </members>
+</doc>

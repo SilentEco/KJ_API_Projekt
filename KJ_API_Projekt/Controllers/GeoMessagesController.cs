@@ -118,10 +118,20 @@ namespace KJ_API_Projekt.Controllers
                // return await _context.geoMessagesV2.Include(a => a.Message).ToListAsync();
             }
 
+
+            /// <summary>
+            /// Visa en  lista av geo comments inom ett visst område
+            /// </summary>
+            /// <param name="minLon">Minsta Longituden</param>
+            /// <param name="maxLon">Högsta Longituden</param>
+            /// <param name="minLat">Minsta Latituden</param>
+            /// <param name="maxLat">Högsta Latituden</param>
+            /// <returns>Returnerar en lista utefter dina valda inputs</returns>
             [HttpGet("[action]")]
 
             public async Task<ActionResult<IEnumerable<v2GetDTO>>> GetgeoMessages(double minLon, double maxLon, double minLat, double maxLat)
             {
+                
                 var geoDB = await _context.geoMessagesV2.Include(a => a.Message).Where(
                     o => (o.longitude <= maxLon && o.longitude >= minLon) && (o.latitude <= maxLat && o.latitude >= minLat))
                     .ToListAsync();
@@ -151,6 +161,7 @@ namespace KJ_API_Projekt.Controllers
 
 
             [HttpPost("[action]")]
+            [Authorize]
             
             public async Task<ActionResult<GeoMessagesV2>> PostGeoMessages(v2PostDTO geoMessagesDTO)
             {

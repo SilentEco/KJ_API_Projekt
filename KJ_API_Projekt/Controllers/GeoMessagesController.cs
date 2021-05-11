@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using KJ_API_Projekt.data;
 using KJ_API_Projekt.model;
 using Microsoft.AspNetCore.Authorization;
+using KJ_API_Projekt.ApiKey;
 
 namespace KJ_API_Projekt.Controllers
 {
@@ -151,13 +152,36 @@ namespace KJ_API_Projekt.Controllers
 
             [HttpPost("[action]")]
             
-            public async Task<ActionResult<GeoMessagesV2>> PostGeoMessages(GeoMessagesV2 geoMessages)
+            public async Task<ActionResult<GeoMessagesV2>> PostGeoMessages(v2PostDTO geoMessagesDTO)
             {
-                
-                _context.geoMessagesV2.Add(geoMessages);
+                //Försök hämta hem User via api nycklen
+                //Här hittar hämtar vi inskriven api nyckel
+                string token = Request.Headers[ApiKeyConstants.HttpHeaderField];
+                if (token == null)
+                    token = Request.Query[ApiKeyConstants.HttpQueryParamKey];
+                //Matcha api nyckel med en userID
+                var userApiDB = await _context.ApiTokens.FirstOrDefaultAsync(o => o.Value == token);
+                var userID = userApiDB.User;
+
+                GeoMessagesV2 geoMessagesV2 = new GeoMessagesV2()
+                {
+                    Message = new Message()
+                    {
+                        Author = userApiDB.User.FirstName + " " + userApiDB.User.LastName
+                                                ,
+                        Body = geoMessagesDTO.Message.Body,
+                        Title = geoMessagesDTO.Message.Title
+                    },
+                    latitude = geoMessagesDTO.latitude,
+                    longitude = geoMessagesDTO.longitude
+
+                };
+
+
+                _context.geoMessagesV2.Add(geoMessagesV2);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction("GetGeoMessages", new { id = geoMessages.Id }, geoMessages);
+                return CreatedAtAction("GetGeoMessages", new { id = geoMessagesV2.Id }, geoMessagesV2);
             }
 
             #region DTO classer
@@ -180,6 +204,28 @@ namespace KJ_API_Projekt.Controllers
 
 
             }
+
+            public class v2PostDTO
+            {
+
+
+                public v2MessagePostDTO Message { get; set; }
+
+                public double longitude { get; set; }
+
+                public double latitude { get; set; }
+
+
+            }
+
+            public class v2MessagePostDTO
+            {
+                public string Title { get; set; }
+                public string Body { get; set; }
+               
+            }
+
+
 
 
             #endregion

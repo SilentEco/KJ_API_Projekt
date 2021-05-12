@@ -16,7 +16,7 @@ namespace KJ_API_Projekt.Controllers
     {
         [ApiController]
         [ApiVersion("1.0")]
-        [Route("api/v{version:apiVersion}/[controller]")]
+        [Route("api/v{version:apiVersion}/")]
         public class GeoMessagesController : ControllerBase
         {
             private readonly ApplicationDbContext _context;
@@ -27,24 +27,22 @@ namespace KJ_API_Projekt.Controllers
             }
 
             // GET: api/GeoMessages
-            [HttpGet("[action]")]
+            [HttpGet("geo-comments")]
 
-            public async Task<ActionResult<IEnumerable<GeoMessages>>> GetgeoMessages()
+            public async Task<ActionResult<IEnumerable<v1GetDTO>>> GetgeoMessages()
             {
                 List<GeoMessagesV2> v2list = await _context.geoMessagesV2.Include(a => a.Message).ToListAsync();
-                List<GeoMessages> v1list = new List<GeoMessages>();
+                List<v1GetDTO> v1list = new List<v1GetDTO>();
                 foreach (var item in v2list)
                 {
-                    GeoMessages geoMessages = new GeoMessages { Message = item.Message.Body, latitude = item.latitude, longitude = item.longitude};
+                    v1GetDTO geoMessages = new v1GetDTO { Message = item.Message.Body, latitude = item.latitude, longitude = item.longitude};
                     v1list.Add(geoMessages);
                 }
                 return v1list;
             }
 
-            // GET: api/GeoMessages/5
-            [HttpGet("[action]/{id}")]
-
-            public async Task<ActionResult<GeoMessages>> GetGeoMessages(int id)
+            [HttpGet("geo-comments/{id}")]
+            public async Task<ActionResult<v1GetDTO>> GetGeoMessages(int id)
             {
                 var geoMessages = await _context.geoMessagesV2.Include(a => a.Message).FirstOrDefaultAsync(b => b.Id == id);
 
@@ -52,7 +50,7 @@ namespace KJ_API_Projekt.Controllers
                 {
                     return NotFound();
                 }
-                var v1modell = new GeoMessages
+                var v1modell = new v1GetDTO
                 {
                     Message = geoMessages.Message.Body,
                     longitude = geoMessages.longitude,
@@ -63,9 +61,9 @@ namespace KJ_API_Projekt.Controllers
 
             // POST: api/GeoMessages
             // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-            [HttpPost("[action]")]
+            [HttpPost("geo-comments")]
             [Authorize]
-            public async Task<ActionResult<GeoMessages>> PostGeoMessages(GeoMessages geoMessages)
+            public async Task<ActionResult<GeoMessagesV2>> PostGeoMessages(v1GetDTO geoMessages)
             {
                 var v2modell = new GeoMessagesV2 { 
                     Message = new Message { 
@@ -75,9 +73,42 @@ namespace KJ_API_Projekt.Controllers
                 _context.geoMessagesV2.Add(v2modell);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction("GetGeoMessages", new { id = geoMessages.Id }, geoMessages);
+                return CreatedAtAction("GetGeoMessages", new { id = v2modell.Id }, v2modell);
+            }
+            #region DTO classer
+
+
+            public class v1GetDTO
+            {
+                public string Message { get; set; }
+
+                public double longitude { get; set; }
+
+                public double latitude { get; set; }
+
+
             }
 
+            public class v2PostDTO
+            {
+
+
+                public v2MessagePostDTO Message { get; set; }
+
+                public double longitude { get; set; }
+
+                public double latitude { get; set; }
+
+
+            }
+
+            public class v2MessagePostDTO
+            {
+                public string Title { get; set; }
+                public string Body { get; set; }
+
+            }
+            #endregion
         }
     }
     
@@ -85,7 +116,7 @@ namespace KJ_API_Projekt.Controllers
     {
         [ApiController]
         [ApiVersion("2.0")]
-        [Route("api/v{version:apiVersion}/[controller]")]
+        [Route("api/v{version:apiVersion}/")]
         public class GeoMessagesController : ControllerBase
         {
             private readonly ApplicationDbContext _context;
@@ -95,7 +126,7 @@ namespace KJ_API_Projekt.Controllers
                 _context = context;
             }
 
-            [HttpGet("[action]/{id}")]
+            [HttpGet("geo-comments/{id}")]
 
             public async Task<ActionResult<v2GetDTO>> GetgeoMessages(int id)
             {
@@ -127,7 +158,7 @@ namespace KJ_API_Projekt.Controllers
             /// <param name="minLat">Minsta Latituden</param>
             /// <param name="maxLat">Högsta Latituden</param>
             /// <returns>Returnerar en lista utefter dina valda inputs</returns>
-            [HttpGet("[action]")]
+            [HttpGet("geo-comments")]
 
             public async Task<ActionResult<IEnumerable<v2GetDTO>>> GetgeoMessages(double minLon, double maxLon, double minLat, double maxLat)
             {
@@ -160,7 +191,7 @@ namespace KJ_API_Projekt.Controllers
             }
 
 
-            [HttpPost("[action]")]
+            [HttpPost("geo-comments")]
             [Authorize]
             
             public async Task<ActionResult<GeoMessagesV2>> PostGeoMessages(v2PostDTO geoMessagesDTO)
@@ -235,15 +266,7 @@ namespace KJ_API_Projekt.Controllers
                 public string Body { get; set; }
                
             }
-
-
-
-
             #endregion
-
-
-
         }
-
     }
 }

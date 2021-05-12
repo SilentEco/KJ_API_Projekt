@@ -22,8 +22,6 @@ namespace KJ_API_Projekt.ApiKey
             UrlEncoder encoder,
             ISystemClock clock,
             ApplicationDbContext context
-
-            
             )
             : base(options, logger, encoder, clock)
         {
@@ -54,22 +52,6 @@ namespace KJ_API_Projekt.ApiKey
                 }
             }
             return AuthenticateResult.Fail("fail");
-           // string testToken = ApiKeys[1].Value;
-           // if (token == testToken)
-           // {
-           //
-           //     var identity = new ClaimsIdentity(Scheme.Name);
-           //     var principal = new ClaimsPrincipal(identity);
-           //     var ticket = new AuthenticationTicket(principal, Scheme.Name);
-           //
-           //     return AuthenticateResult.Success(ticket);
-           // }
-           // else
-           // {
-           //     return AuthenticateResult.Fail("FAIL!!!");
-           // }
-
         }
-
     }
 }

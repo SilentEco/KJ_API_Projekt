@@ -16,7 +16,6 @@ namespace KJ_API_Projekt.ApiKey
             _context = context;
         }
 
-
         public async Task<string> GenerateTokenAsync(MyUser user)
         {
             // Försök att hitta om det redan finns en token

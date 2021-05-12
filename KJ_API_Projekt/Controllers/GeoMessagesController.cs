@@ -26,9 +26,7 @@ namespace KJ_API_Projekt.Controllers
                 _context = context;
             }
 
-            // GET: api/GeoMessages
             [HttpGet("geo-comments")]
-
             public async Task<ActionResult<IEnumerable<v1GetDTO>>> GetgeoMessages()
             {
                 List<GeoMessagesV2> v2list = await _context.geoMessagesV2.Include(a => a.Message).ToListAsync();
@@ -59,8 +57,6 @@ namespace KJ_API_Projekt.Controllers
                 return v1modell;
             }
 
-            // POST: api/GeoMessages
-            // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
             [HttpPost("geo-comments")]
             [Authorize]
             public async Task<ActionResult<GeoMessagesV2>> PostGeoMessages(v1GetDTO geoMessages)
@@ -77,29 +73,18 @@ namespace KJ_API_Projekt.Controllers
             }
             #region DTO classer
 
-
             public class v1GetDTO
             {
                 public string Message { get; set; }
-
                 public double longitude { get; set; }
-
                 public double latitude { get; set; }
-
-
             }
 
             public class v2PostDTO
             {
-
-
                 public v2MessagePostDTO Message { get; set; }
-
                 public double longitude { get; set; }
-
                 public double latitude { get; set; }
-
-
             }
 
             public class v2MessagePostDTO
@@ -146,10 +131,7 @@ namespace KJ_API_Projekt.Controllers
                 };
 
                 return geoDTO; 
-               // return await _context.geoMessagesV2.Include(a => a.Message).ToListAsync();
             }
-
-
             /// <summary>
             /// Visa en  lista av geo comments inom ett visst område
             /// </summary>
@@ -185,12 +167,8 @@ namespace KJ_API_Projekt.Controllers
 
                     listGeoDTO.Add(geoDTO);
                 }
-
-
                 return listGeoDTO;
             }
-
-
             [HttpPost("geo-comments")]
             [Authorize]
             
@@ -218,8 +196,6 @@ namespace KJ_API_Projekt.Controllers
                     longitude = geoMessagesDTO.longitude
 
                 };
-
-
                 _context.geoMessagesV2.Add(geoMessagesV2);
                 await _context.SaveChangesAsync();
 
